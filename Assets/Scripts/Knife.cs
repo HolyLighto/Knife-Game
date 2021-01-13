@@ -13,6 +13,7 @@ public class Knife : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
         _boxCollider.enabled = false;
+        Vibration.Init();
         
     }
 
@@ -31,9 +32,11 @@ public class Knife : MonoBehaviour
         if (collision.gameObject.CompareTag("Wood"))
         {
             gameObject.transform.SetParent(collision.transform);
+            Vibration.Vibrate(100);
         }
         if(collision.gameObject.CompareTag("Knife"))
         {
+            Vibration.Vibrate(100);
             SceneManager.LoadScene(0);
         }
     }
