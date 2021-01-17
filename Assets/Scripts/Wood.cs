@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,20 +14,20 @@ public class Wood : MonoBehaviour
     private LayerMask _mask;
 
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if(!_isGameEnded) transform.rotation *= Quaternion.Euler(0, 2, 0);
+        if(!_isGameEnded) transform.rotation *= Quaternion.Euler(0, 6, 0);
     }
 
     private void Start()
     {
-        _explosionPosition = transform;
         _rb = GetComponentsInChildren<Rigidbody>();
         _mask = LayerMask.NameToLayer("Wood");
     }
 
     private void EndGame()
     {
+        Vibration.Vibrate(1000);
         _isGameEnded = !_isGameEnded;
         foreach (var a in _rb)
         {
@@ -39,6 +38,7 @@ public class Wood : MonoBehaviour
         foreach(var a in b)
         {
             a.EnableGravity();
+            a.EnableRotation();
         }
         Collider[] colliders = Physics.OverlapSphere(_explosionPosition.position, _radius);
         foreach (Collider hit in colliders)

@@ -33,6 +33,11 @@ public class Knife : MonoBehaviour
         _rigidbody.useGravity = true;
     }
 
+    public void EnableRotation()
+    {
+        _rigidbody.freezeRotation = false;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Wood") && _isScoreTaken == false)
