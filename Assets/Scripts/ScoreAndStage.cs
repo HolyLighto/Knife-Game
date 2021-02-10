@@ -30,5 +30,10 @@ public static class ScoreAndStage
         if (PlayerPrefs.GetInt("stage") < ScoreAndStage.Stage) PlayerPrefs.SetInt("stage", ScoreAndStage.Stage);
     }
 
+    public static void ClearRecords()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
 
 }

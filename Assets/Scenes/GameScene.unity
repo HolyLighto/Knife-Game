@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _queueMax: 6
-  _timeToReload: 1
+  _timeToReload: 0.3
   Knife: {fileID: 475039090, guid: fd3928bd9fa116644bfb12f5ce18cb9b, type: 3}
 --- !u!1 &339381924
 GameObject:
@@ -1131,6 +1131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _radius: 100
   _power: 5
+  _rotationSpeed: 5
   _explosionPosition: {fileID: 1505103734}
   Menu: {fileID: 11649840}
 --- !u!4 &1194763428 stripped
