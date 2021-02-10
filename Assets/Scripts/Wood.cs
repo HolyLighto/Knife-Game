@@ -7,32 +7,39 @@ public class Wood : MonoBehaviour
 {
     [SerializeField] private float _radius;
     [SerializeField] private float _power;
+    [SerializeField] private float _rotationSpeed;
+    [SerializeField] private Transform _explosionPosition;
+    private int _scoreToFinish;
     private Rigidbody[] _rb;
-    [SerializeField]private Transform _explosionPosition;
-    private bool _isGameEnded = false;
-    [SerializeField]private int ScoreToFinish = 5;
-    private LayerMask _mask;
+    private KnifeQueue _knifeQueue;
+
+    public GameObject Menu;
 
 
     private void FixedUpdate()
     {
-        if(!_isGameEnded) transform.rotation *= Quaternion.Euler(0, 6, 0);
+        if(!GameState.IsGameEnded) transform.rotation *= Quaternion.Euler(0, _rotationSpeed, 0);
     }
 
-    private void Start()
+    private void Awake()
     {
-        _rb = GetComponentsInChildren<Rigidbody>();
-        _mask = LayerMask.NameToLayer("Wood");
+        GameState.GameStart();
+        _knifeQueue = FindObjectOfType<KnifeQueue>();
+        _scoreToFinish = _knifeQueue.KnifeCount;
+        Time.timeScale = 1f;
+        Debug.Log("loaded");
     }
 
     private void EndGame()
     {
+        _rb = GetComponentsInChildren<Rigidbody>();
         Vibration.Vibrate(1000);
-        _isGameEnded = !_isGameEnded;
+        GameState.GameOver();
+        ScoreAndStage.AddStage();
         foreach (var a in _rb)
         {
-            a.isKinematic = false;
-            a.useGravity = true;
+            if(_rb != null) a.isKinematic = false;
+            if(_rb != null) a.useGravity = true;
         }
         var b = FindObjectsOfType<Knife>();
         foreach(var a in b)
@@ -44,20 +51,20 @@ public class Wood : MonoBehaviour
         foreach (Collider hit in colliders)
         {
             Rigidbody rb = hit.GetComponent<Rigidbody>();
-            //if (rb != null) rb.AddExplosionForce(_power, _explosionPosition.position, _radius, 3.0f);
             if (rb != null) rb.AddForce((hit.transform.position - _explosionPosition.position) * _power, ForceMode.Impulse);
+            if (rb != null) rb.AddForce(-Vector3.forward * _power, ForceMode.Impulse);
         }
-        Invoke("ReloadScene", 5);
+        Invoke("ReloadScene", 2);
     }
 
     public void MinusScore()
     {
-        if (ScoreToFinish > 0) ScoreToFinish--;
-        if (ScoreToFinish <= 0) EndGame();
+        if (_scoreToFinish > 0) _scoreToFinish--;
+        if (_scoreToFinish <= 0) EndGame();
     }
 
     public void ReloadScene()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }

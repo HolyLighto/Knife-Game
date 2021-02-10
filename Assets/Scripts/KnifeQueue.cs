@@ -4,36 +4,42 @@ using UnityEngine;
 
 public class KnifeQueue : MonoBehaviour
 {
-    Queue<Knife> _queue = new Queue<Knife>();
-    public Knife Knife;
     [SerializeField]private int _queueMax = 6;
+    [SerializeField]private float _timeToReload;
+    private bool _readyToFire = true;
+    private Queue<Knife> _queue = new Queue<Knife>();
+
+    public Knife Knife;
     public int KnifeCount { get => _queueMax; }
-    void Start()
+    void Awake()
     {
         for (int i = 0; i < _queueMax; i++)
         {
-            _queue.Enqueue(Instantiate(Knife, transform.position, Quaternion.identity));
+            var temp = Instantiate(Knife, transform.position, Quaternion.identity);
+            temp.KnifeInWood();
+            temp.SetBoxCollider(false);
+            _queue.Enqueue(temp);
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //if(_queue.Count == 0 && _queueMax > 0)
-        //{
-        //    _queue.Enqueue(Instantiate(Knife, transform.position, Quaternion.identity));
-        //    _queueMax--;
-        //}
-
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !GameState.IsGameEnded)
         {
-            if (_queue.Count > 0)
+            if (_queue.Count > 0 && _readyToFire)
             {
+                _readyToFire = false;
                 _queueMax--;
                 Knife knife = _queue.Dequeue();
-                knife.EnableBoxCollider();
+                knife.SetBoxCollider(true);
                 knife.Throw();
+                Invoke("ReadyToFire", _timeToReload);
             }
         }
+    }
+
+    private void ReadyToFire()
+    {
+        _readyToFire = true;
     }
 }

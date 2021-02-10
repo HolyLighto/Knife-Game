@@ -25,10 +25,10 @@ BoxCollider:
   m_GameObject: {fileID: 3942495999147617735}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.008068435, y: 0.0129519105, z: 0.0015922582}
-  m_Center: {x: 0, y: -0.009529875, z: -6.705523e-10}
+  m_Size: {x: 0.22584327, y: 1.2467637, z: 0.048793644}
+  m_Center: {x: 0.016859062, y: -0.49289823, z: 0.0035666823}
 --- !u!114 &475039090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,6 +41,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c0a3c677ebb594d9980bdae4ffe28e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moneyText: {fileID: 0}
+  _scoreText: {fileID: 0}
 --- !u!1001 &5014584666176943310
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,6 +104,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 1e7f2427a4fba2546bdddc30c5b5f9e9,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 1e7f2427a4fba2546bdddc30c5b5f9e9,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 1e7f2427a4fba2546bdddc30c5b5f9e9,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 1e7f2427a4fba2546bdddc30c5b5f9e9,
         type: 3}

@@ -1,31 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class Knife : MonoBehaviour
 {
+    [SerializeField] private SetText _moneyText;
+    [SerializeField] private ScoreText _scoreText;
     private Rigidbody _rigidbody;
     private BoxCollider _boxCollider;
     private bool _isScoreTaken = false;
+    private bool _isKnifeInWood = true;
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _boxCollider = GetComponent<BoxCollider>();
-        _boxCollider.enabled = false;
+        SetBoxCollider(true);
         Vibration.Init();
-        
+        _moneyText = GameObject.FindWithTag("Money").GetComponent<SetText>();
+        _scoreText = GameObject.FindWithTag("Score").GetComponent<ScoreText>();
     }
 
-    public void EnableBoxCollider()
+    private void AddMoney()
     {
-        _boxCollider.enabled = true;
+        PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money") + 1);
+        _moneyText.UpdateText();
+    }
+
+    public void SetBoxCollider(bool box)
+    {
+        _boxCollider.enabled = box;
     }
     public void Throw()
     {
         _rigidbody.AddForce(Vector3.up * 30, ForceMode.Impulse);
-        Debug.Log("throw");
+        Debug.Log("throw");                             
     }
 
     public void EnableGravity()
@@ -35,7 +42,12 @@ public class Knife : MonoBehaviour
 
     public void EnableRotation()
     {
-        _rigidbody.freezeRotation = false;
+        _rigidbody.freezeRotation = false;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    }
+
+    public void KnifeInWood()
+    {
+        _isKnifeInWood = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -43,17 +55,39 @@ public class Knife : MonoBehaviour
         if (collision.gameObject.CompareTag("Wood") && _isScoreTaken == false)
         {
             gameObject.transform.SetParent(collision.transform);
-            Vibration.Vibrate(100);
             var temp = collision.gameObject.GetComponentInParent<Wood>();
-            temp.MinusScore();
-            //_rigidbody.isKinematic = true;
-            _isScoreTaken = true;
+            if (!_isKnifeInWood)
+            {
+                Vibration.Vibrate(100);
+                temp.MinusScore();
+                _rigidbody.isKinematic = true;
+                _isScoreTaken = true;
+                ScoreAndStage.AddScore(1);
+                _scoreText.UpdateText();
+                AddMoney();
+            }
             
         }
         if(collision.gameObject.CompareTag("Knife") && _isScoreTaken == false)
         {
+            ScoreAndStage.CheckRecords();
+            ScoreAndStage.Reset();
             Vibration.Vibrate();
-            SceneManager.LoadScene(0);
+            GameState.GameOver();
+            GameState.GameFreeze(true);
+            var menu = FindObjectOfType<Wood>();
+            menu.Menu.SetActive(true);
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Apple"))
+        {
+            AddMoney();
+            ScoreAndStage.AddScore(1);
+            Destroy(other.gameObject);
         }
     }
 }

@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Knife
   - Wood
+  - Apple
+  - Stage
+  - Money
+  - Score
+  - Menu
   layers:
   - Default
   - TransparentFX
